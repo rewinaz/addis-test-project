@@ -61,6 +61,11 @@ export const deleteSong = async (req: Request, res: Response) => {
 export const getAllSongs = async (req: Request, res: Response) => {
   Song.find()
     .then((songs) => {
+      if (songs.length === 0) {
+        return res.status(404).json({
+          message: "No songs found",
+        });
+      }
       res.status(200).json({
         message: "Songs fetched successfully",
         songs,
