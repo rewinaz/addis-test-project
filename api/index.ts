@@ -10,6 +10,7 @@ const PORT = 3000 | Number(process.env.PORT);
 const app = express();
 
 
+
 app.use(
   cors({
     origin: ["http://localhost:3000", "https://addis-test-project.vercel.app/"],
@@ -40,6 +41,9 @@ mongoose
     console.log("Error connecting to database", err);
   });
 
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
 app.use("/api/v1/songs", songsRoute);
 
 app.listen(PORT, () => {
