@@ -12,6 +12,7 @@ export const createSongApi = async (song: SongType) => {
 };
 
 export const fetchSongsApi = async () => {
+  console.log("API_URL :: ", API_URL);
   try {
     const { data } = await axios.get(API_URL);
     return data;
