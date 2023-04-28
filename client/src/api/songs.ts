@@ -1,7 +1,7 @@
 import axios from "axios";
 import { SongType } from "../types";
 
-const API_URL = import.meta.env.VITE_API_URI as string;
+const API_URL = (import.meta.env.VITE_API_URI as string) + `/api/v1/songs`;
 export const createSongApi = async (song: SongType) => {
   try {
     const { data } = await axios.post(API_URL, song);
