@@ -18,6 +18,7 @@ export const songSlice = createSlice({
     getSong: (state, action) => {
       const song = state.songs.find((song) => song._id === action.payload);
       state.songs = action.payload;
+      return state;
     },
     getSongs: (state, action) => {
       state = action.payload;
@@ -44,6 +45,7 @@ export const songSlice = createSlice({
       );
       state.songs.splice(index, 1);
       state.songs = state.songs;
+      return state;
     },
   },
 });
