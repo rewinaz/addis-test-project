@@ -11,6 +11,7 @@ import {
   deleteSong,
   getSong,
   getSongs,
+  setLoading,
   setSong,
   updateSong,
 } from "../slices/songSlice";
@@ -20,12 +21,17 @@ import {
   GET_SONGS,
   SEARCH_SONG_BY_NAME,
   UPDATE_SONG_BY_ID,
+  SET_IS_LOADING,
 } from "../types/index";
 
 export function* fetchSongsSaga() {
+  yield put(setLoading(true));
   const songs: ReturnType<typeof fetchSongsApi> = yield fetchSongsApi();
   console.log("ALL_SONGS_SAGA :: ", songs);
-  if (songs) yield put(getSongs(songs));
+  if (songs) {
+    yield put(setLoading(false));
+    yield put(getSongs(songs));
+  }
 }
 
 export function* createSongSaga(action: { payload: SongType }) {

@@ -2,12 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 import { SongTypeWithId } from "../../types";
 
 type InitialStateType = {
-  isLoaded: boolean;
+  isLoading: boolean;
   songs: SongTypeWithId[];
 };
 
 const initialState: InitialStateType = {
-  isLoaded: false,
+  isLoading: false,
   songs: [],
 };
 
@@ -50,11 +50,22 @@ export const songSlice = createSlice({
       console.log("FROM SLICE DELETE:: ", action.payload.song, " :: ", index);
       return state;
     },
+    setLoading: (state, action) => {
+      console.log("FROM SLICE SET_LOADING:: ", action.payload);
+      state.isLoading = action.payload;
+      return state;
+    },
   },
 });
 
-export const { getSong, getSongs, setSong, deleteSong, updateSong } =
-  songSlice.actions;
+export const {
+  getSong,
+  getSongs,
+  setSong,
+  deleteSong,
+  updateSong,
+  setLoading,
+} = songSlice.actions;
 
 export const selectSong = (state: InitialStateType) => state.songs;
 

@@ -1,10 +1,10 @@
-import { Box } from "rebass";
+import { Box, Text } from "rebass";
 import styled from "styled-components";
 import SongCard from "./SongCard";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { SongTypeWithId } from "../types";
-import { useState } from "react";
+import { Bars } from "react-loader-spinner";
 
 type Props = {
   setShowSidebar: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,11 +13,11 @@ type Props = {
 };
 
 const SongList = ({ setShowSidebar, setSelectedSong, setShowSong }: Props) => {
-  const { songs } = useSelector((state: RootState) => state.songs);
+  const { songs, isLoading } = useSelector((state: RootState) => state.songs);
 
   return (
     <GridBox>
-      {songs.length === 0 && (
+      {songs.length === 0 && !isLoading && (
         <Box
           sx={{
             color: "white",
@@ -28,6 +28,21 @@ const SongList = ({ setShowSidebar, setSelectedSong, setShowSong }: Props) => {
         >
           No Songs Found
         </Box>
+      )}
+
+      {isLoading && (
+        <LoadingBox>
+          <Bars
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="bars-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+          <Text>Loading...</Text>
+        </LoadingBox>
       )}
       {songs.map((song) => (
         <SongCard
@@ -49,6 +64,21 @@ const GridBox = styled(Box)`
   gap: 2rem 2rem;
   grid-template-columns: repeat(auto-fit, minmax(312px, 1fr));
   padding-bottom: 2rem;
+`;
+
+const LoadingBox = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100vh;
+  width: 100vw;
+  z-index: 20;
 `;
 
 export default SongList;
