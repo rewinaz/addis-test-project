@@ -5,11 +5,25 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 
-const PORT = Number(process.env.PORT);
+const PORT = Number(process.env.PORT) || 3000;
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "Origin",
+      "X-Requested-With",
+      "Accept",
+      "Access-Control-Allow-Headers",
+      "Access-Control-Allow-Origin",
+    ],
+  })
+);
 // app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 // @ts-ignore
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
@@ -31,7 +45,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/songs", songsRoute);
 
 app.listen(PORT, () => {
-  console.log("Server is listening on port 3000");
+  console.log(`Server is listening on port ${PORT}`);
 });
 
 export default app;
