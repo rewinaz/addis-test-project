@@ -54,7 +54,7 @@ export const deleteSong = async (req: Request, res: Response) => {
       res.status(500).json({
         message: "Error deleting song",
         error: err,
-      });
+      }); 
     });
 };
 
