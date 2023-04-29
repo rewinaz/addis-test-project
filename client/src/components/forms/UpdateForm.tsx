@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Sidebar from "../Sidebar";
-import { Text,Box, Button, Flex, Heading } from "rebass";
+import { Text, Box, Button, Flex, Heading } from "rebass";
 import styled from "styled-components";
 import TextInput from "./TextInput";
 import FileSelector from "./FileSelector";
@@ -9,6 +9,9 @@ import { useDispatch } from "react-redux";
 import { UPDATE_SONG_BY_ID } from "../../redux/types";
 import { SongType, SongTypeWithId } from "../../types";
 import { genres } from "../../data";
+import { Formik, Form, Field } from "formik";
+import ErrorMessage from "./ErrorMessage";
+import { SongSchema } from "../../validationSchemas";
 
 type Props = {
   show: boolean;
@@ -24,31 +27,17 @@ const UpdateForm = ({
   setShowSidebar,
 }: Props) => {
   const [image, setImage] = React.useState<string>(selectedSong.image);
-  const [title, setTitle] = React.useState<string>(selectedSong.title);
-  const [artist, setArtist] = React.useState<string>(selectedSong.artist);
-  const [album, setAlbum] = React.useState<string>(selectedSong.album);
-  const [duration, setDuration] = React.useState<string>(selectedSong.duration);
-  const [year, setYear] = React.useState<string>(selectedSong.year);
   const [genre, setGenre] = React.useState<string>(selectedSong.genre);
 
   const dispatch = useDispatch();
 
-  const updateSongOnSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const updateSongOnSubmit = (id: string, song: SongType) => {
     //TODO:
     dispatch({
       type: UPDATE_SONG_BY_ID,
       payload: {
-        id: selectedSong._id,
-        song: {
-          title,
-          artist,
-          album,
-          duration,
-          year,
-          genre,
-          image,
-        },
+        id: id,
+        song: song,
       },
     });
     setShowSidebar(false);
@@ -59,88 +48,112 @@ const UpdateForm = ({
       <Text as={"h1"} mb={4} sx={{ textTransform: "capitalize" }}>
         Update Song
       </Text>
-      <FormStyle action="" onSubmit={updateSongOnSubmit}>
-        <FileSelector
-          state={image}
-          setState={setImage}
-          buttonText="Insert Image"
-        />
-        <TextInput
-          name="song-name"
-          placeholder="Song Name"
-          defaultValue={selectedSong.title}
-          onChange={(e) =>
-            e.target.value.length > 0 && setTitle(e.target.value)
+      <Formik
+        initialValues={{
+          title: selectedSong.title,
+          artist: selectedSong.artist,
+          album: selectedSong.album,
+          duration: selectedSong.duration,
+          year: selectedSong.year,
+        }}
+        validationSchema={SongSchema}
+        onSubmit={(values) => {
+          if (image && image.length > 0) {
+            updateSongOnSubmit(selectedSong._id, {
+              title: values.title,
+              artist: values.artist,
+              album: values.album,
+              duration: values.duration,
+              year: values.year,
+              genre: genre,
+              image: image,
+            });
           }
-        />
-        <TextInput
-          name="artist"
-          placeholder="Artist"
-          defaultValue={selectedSong.artist}
-          onChange={(e) =>
-            e.target.value.length > 0 && setArtist(e.target.value)
-          }
-        />
-        <TextInput
-          name="album"
-          placeholder="Album Name"
-          defaultValue={selectedSong.album}
-          onChange={(e) =>
-            e.target.value.length > 0 && setAlbum(e.target.value)
-          }
-        />
-        <TextInput
-          name="duration"
-          placeholder="Duration"
-          defaultValue={selectedSong.duration}
-          onChange={(e) =>
-            e.target.value.length > 0 && setDuration(e.target.value)
-          }
-        />
-        <TextInput
-          name="year"
-          placeholder="Year"
-          defaultValue={selectedSong.year}
-          onChange={(e) => e.target.value.length > 0 && setYear(e.target.value)}
-        />
+        }}
+      >
+        {({ errors, touched }) => (
+          <Form>
+            {image.length < 1 ? (
+              <ErrorMessage message={"Image is required"} />
+            ) : null}
+            <FileSelector
+              state={image}
+              setState={setImage}
+              buttonText="Insert Image"
+            />
+            {errors.title && touched.title ? (
+              <ErrorMessage message={errors.title} />
+            ) : null}
+            <Field name="title" placeholder="Song Name" component={TextInput} />
+            {errors.artist && touched.artist ? (
+              <ErrorMessage message={errors.artist} />
+            ) : null}
+            <Field name="artist" placeholder="Artist" component={TextInput} />
 
-        <Select
-          name="genre"
-          defaultValue={
-            Object.entries(genres).find(
-              ([key, genre]) =>
-                genre.toLocaleLowerCase() ===
-                selectedSong.genre.toLocaleLowerCase()
-            )?.[1]
-          }
-          onChange={(e) => setGenre(e.target.value)}
-          sx={{
-            backgroundColor: "#333333",
-            color: "white",
-            mb: 3,
-          }}
-        >
-          {Object.entries(genres).map(([key, genre]) => (
-            <option key={key}>{genre}</option>
-          ))}
-        </Select>
-        <Button
-          onClick={() => updateSongOnSubmit}
-          type="submit"
-          sx={{
-            width: "100%",
-            color: "white",
-            backgroundColor: "blue",
-            cursor: "pointer",
-          }}
-        >
-          Update Song
-        </Button>
-      </FormStyle>
+            {errors.album && touched.album ? (
+              <ErrorMessage message={errors.album} />
+            ) : null}
+            <Field name="album" placeholder="Album" component={TextInput} />
+            {errors.duration && touched.duration ? (
+              <ErrorMessage message={errors.duration} />
+            ) : null}
+            <Field
+              name="duration"
+              placeholder="Duration"
+              component={TextInput}
+              type="number"
+            />
+            {errors.year && touched.year ? (
+              <ErrorMessage message={errors.year} />
+            ) : null}
+            <Field
+              name="year"
+              placeholder="Year"
+              component={TextInput}
+              type="number"
+            />
+
+            {genre.length < 1 ? (
+              <ErrorMessage message={"Genre is required"} />
+            ) : null}
+
+            <Select
+              name="genre"
+              defaultValue={
+                Object.entries(genres).find(
+                  ([key, genre]) =>
+                    genre.toLocaleLowerCase() ===
+                    selectedSong.genre.toLocaleLowerCase()
+                )?.[1]
+              }
+              onChange={(e) => setGenre(e.target.value)}
+              sx={{
+                backgroundColor: "#333333",
+                color: "white",
+                mb: 3,
+              }}
+            >
+              {Object.entries(genres).map(([key, genre]) => (
+                <option key={key}>{genre}</option>
+              ))}
+            </Select>
+            <Button
+              onClick={() => updateSongOnSubmit}
+              type="submit"
+              sx={{
+                width: "100%",
+                color: "white",
+                backgroundColor: "blue",
+                cursor: "pointer",
+              }}
+            >
+              Update Song
+            </Button>
+          </Form>
+        )}
+      </Formik>
     </Sidebar>
   );
 };
-
-const FormStyle = styled.form``;
 
 export default UpdateForm;

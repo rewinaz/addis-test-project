@@ -8,8 +8,11 @@ import FileSelector from "./FileSelector";
 import { useDispatch } from "react-redux";
 import { setSong } from "../../redux/slices/songSlice";
 import { CREATE_SONG } from "../../redux/types";
-import { SongTypeWithId } from "../../types";
+import { SongType, SongTypeWithId } from "../../types";
 import { genres } from "../../data";
+import { Formik, Form, Field } from "formik";
+import ErrorMessage from "./ErrorMessage";
+import { SongSchema } from "../../validationSchemas";
 
 type Props = {
   show: boolean;
@@ -18,29 +21,15 @@ type Props = {
 
 const InsertForm = ({ show, setShowSidebar }: Props) => {
   const [image, setImage] = React.useState<string>("");
-  const [title, setTitle] = React.useState<string>("update_test");
-  const [artist, setArtist] = React.useState<string>("update_test");
-  const [album, setAlbum] = React.useState<string>("update_test");
-  const [duration, setDuration] = React.useState<string>("update_test");
-  const [year, setYear] = React.useState<string>("update_test");
+
   const [genre, setGenre] = React.useState<string>(genres[0]);
 
   const dispatch = useDispatch();
 
-  const insertSongOnSubmitHandler = (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const insertSongOnSubmitHandler = (song: SongType) => {
     dispatch({
       type: CREATE_SONG,
-      payload: {
-        title,
-        artist,
-        album,
-        duration,
-        year,
-        genre,
-        image,
-      },
+      payload: song,
     });
     setShowSidebar(false);
   };
@@ -49,78 +38,106 @@ const InsertForm = ({ show, setShowSidebar }: Props) => {
       <Text as={"h1"} mb={4} sx={{ textTransform: "capitalize" }}>
         Add Song
       </Text>
-      <FormStyle action="" onSubmit={insertSongOnSubmitHandler}>
-        <FileSelector
-          state={image}
-          setState={setImage}
-          buttonText="Insert Image"
-        />
-        <TextInput
-          name="song-name"
-          placeholder="Song Name"
-          onChange={(e) =>
-            e.target.value.length > 0 && setTitle(e.target.value)
+      <Formik
+        initialValues={{
+          title: "",
+          artist: "",
+          album: "",
+          duration: "",
+          year: "",
+        }}
+        validationSchema={SongSchema}
+        onSubmit={(values) => {
+          if (image && image.length > 0) {
+            insertSongOnSubmitHandler({
+              title: values.title,
+              artist: values.artist,
+              album: values.album,
+              duration: values.duration,
+              year: values.year,
+              genre: genre,
+              image: image,
+            });
           }
-        />
-        <TextInput
-          name="artist"
-          placeholder="Artist"
-          onChange={(e) =>
-            e.target.value.length > 0 && setArtist(e.target.value)
-          }
-        />
-        <TextInput
-          name="album"
-          placeholder="Album Name"
-          onChange={(e) =>
-            e.target.value.length > 0 && setAlbum(e.target.value)
-          }
-        />
-        <TextInput
-          name="duration"
-          placeholder="Duration"
-          onChange={(e) =>
-            e.target.value.length > 0 && setDuration(e.target.value)
-          }
-        />
-        <TextInput
-          name="year"
-          placeholder="Year"
-          onChange={(e) => e.target.value.length > 0 && setYear(e.target.value)}
-        />
+        }}
+      >
+        {({ errors, touched }) => (
+          <Form>
+            {image.length < 1 ? (
+              <ErrorMessage message={"Image is required"} />
+            ) : null}
+            <FileSelector
+              state={image}
+              setState={setImage}
+              buttonText="Insert Image"
+            />
+            {errors.title && touched.title ? (
+              <ErrorMessage message={errors.title} />
+            ) : null}
+            <Field name="title" placeholder="Song Name" component={TextInput} />
+            {errors.artist && touched.artist ? (
+              <ErrorMessage message={errors.artist} />
+            ) : null}
+            <Field name="artist" placeholder="Artist" component={TextInput} />
 
-        <Select
-          name="genre"
-          sx={{
-            backgroundColor: "#333333",
-            color: "white",
-            mb: 3,
-          }}
-          defaultValue={genres[0]}
-          onChange={(e) => setGenre(e.target.value)}
-          value={genre[0]}
-        >
-          {Object.entries(genres).map(([key, genre]) => (
-            <option key={key}>{genre}</option>
-          ))}
-        </Select>
-        <Button
-          onClick={insertSongOnSubmitHandler}
-          type="submit"
-          sx={{
-            width: "100%",
-            color: "white",
-            backgroundColor: "blue",
-            cursor: "pointer",
-          }}
-        >
-          Insert Song
-        </Button>
-      </FormStyle>
+            {errors.album && touched.album ? (
+              <ErrorMessage message={errors.album} />
+            ) : null}
+            <Field name="album" placeholder="Album" component={TextInput} />
+            {errors.duration && touched.duration ? (
+              <ErrorMessage message={errors.duration} />
+            ) : null}
+            <Field
+              name="duration"
+              placeholder="Duration"
+              component={TextInput}
+              type="number"
+            />
+            {errors.year && touched.year ? (
+              <ErrorMessage message={errors.year} />
+            ) : null}
+            <Field
+              name="year"
+              placeholder="Year"
+              component={TextInput}
+              type="number"
+            />
+
+            {genre.length < 1 ? (
+              <ErrorMessage message={"Genre is required"} />
+            ) : null}
+
+            <Select
+              name="genre"
+              sx={{
+                backgroundColor: "#333333",
+                color: "white",
+                mb: 3,
+              }}
+              defaultValue={genres[0]}
+              onChange={(e) => setGenre(e.target.value)}
+            >
+              {Object.entries(genres).map(([key, genre]) => (
+                <option key={key}>{genre}</option>
+              ))}
+            </Select>
+            <Button
+              onClick={() => insertSongOnSubmitHandler}
+              type="submit"
+              sx={{
+                width: "100%",
+                color: "white",
+                backgroundColor: "blue",
+                cursor: "pointer",
+              }}
+            >
+              Insert Song
+            </Button>
+          </Form>
+        )}
+      </Formik>
     </Sidebar>
   );
 };
-
-const FormStyle = styled.form``;
 
 export default InsertForm;

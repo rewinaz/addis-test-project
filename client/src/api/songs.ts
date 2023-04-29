@@ -27,6 +27,7 @@ export const fetchSongsApi = async () => {
 export const updateSongApi = async (id: string, song: SongType) => {
   try {
     const { data } = await axios.put(`${API_URL}/${id}`, song);
+    console.log("UPDATED_DATA :: ", data);
     return data;
   } catch (err) {
     console.log(err);

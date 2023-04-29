@@ -34,7 +34,7 @@ const Header = ({ setShowSidebar }: Props) => {
         justifyContent={"space-between"}
         alignItems="center"
       >
-        <Text as="h1" sx={{ textTransform: "uppercase" }}>
+        <Text as="h1" sx={{ textTransform: "uppercase", lineHeight: "1" }}>
           Adiss Song List
         </Text>
         <Button

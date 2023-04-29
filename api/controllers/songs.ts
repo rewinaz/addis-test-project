@@ -54,7 +54,7 @@ export const deleteSong = async (req: Request, res: Response) => {
       res.status(500).json({
         message: "Error deleting song",
         error: err,
-      }); 
+      });
     });
 };
 
@@ -113,15 +113,20 @@ export const updateSong = async (req: Request, res: Response) => {
   }
 
   try {
-    const song = await Song.findByIdAndUpdate(id, {
-      title,
-      artist,
-      album,
-      year,
-      genre,
-      duration,
-      image,
-    });
+    console.log("song::", id);
+    const song = await Song.findByIdAndUpdate(
+      id,
+      {
+        title: title,
+        artist: artist,
+        album: album,
+        year: year,
+        genre: genre,
+        duration: duration,
+        image: image,
+      },
+      { new: true }
+    );
 
     if (!song) {
       return res.status(404).json({
@@ -135,7 +140,7 @@ export const updateSong = async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "Somthing went wrong",
+      message: "Somthing went wronggggg",
     });
   }
 };

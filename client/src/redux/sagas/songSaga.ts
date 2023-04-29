@@ -48,12 +48,11 @@ export function* deleteSongSaga(action: { payload: string }) {
 export function* updateSongSaga(action: {
   payload: { id: string; song: SongType };
 }) {
-  console.log("UPDATE_SONG :: ", action.payload);
-  const song: ReturnType<typeof updateSongApi> = yield updateSongApi(
-    action.payload.id,
-    action.payload.song
+  console.log("UPDATE_SONG_SAGA :: ", action.payload);
+  const song: ReturnType<typeof updateSongApi> = yield call(() =>
+    updateSongApi(action.payload.id, action.payload.song)
   );
-  console.log("UPDATE_SONG :: ", song);
+  console.log("UPDATE_SONG_SAGA :: ", song);
   if (song) yield put(updateSong(song));
 }
 
@@ -73,7 +72,7 @@ export function* watchSongsAsync() {
   // @ts-ignore
   yield takeEvery(DELETE_SONG_BY_ID, deleteSongSaga);
   // @ts-ignore
-  yield takeEvery(UPDATE_SONG_BY_ID, updateSongSaga);
+  yield takeLatest(UPDATE_SONG_BY_ID, updateSongSaga);
   // @ts-ignore
   yield takeEvery(SEARCH_SONG_BY_NAME, searchSongsSaga);
 }
