@@ -55,7 +55,7 @@ const Header = ({ setShowSidebar }: Props) => {
           id="comment"
           name="comment"
           placeholder="Search Song By Title"
-          onInput={debounce(searchSongEvent, 100)}
+          onInput={debounce(searchSongEvent, 300)}
         />
       </FormStyle>
     </HeaderStyle>
