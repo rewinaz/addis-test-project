@@ -33,3 +33,5 @@ app.use("/api/v1/songs", songsRoute);
 app.listen(PORT, () => {
   console.log("Server is listening on port 3000");
 });
+
+export default app;
