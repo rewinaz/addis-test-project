@@ -13,7 +13,7 @@ export const createSong = async (req: any, res: Response) => {
 
   try {
     const song = new Song({
-      title,
+      title: title.toLowerCase().trim(),
       artist,
       album,
       year,
@@ -23,7 +23,8 @@ export const createSong = async (req: any, res: Response) => {
     });
 
     await song.save();
-    res.status(201).json({
+
+    return res.status(201).json({
       message: "Song created successfully",
       song,
     });
@@ -50,6 +51,7 @@ export const deleteSong = async (req: Request, res: Response) => {
         song,
       });
     })
+
     .catch((err) => {
       res.status(500).json({
         message: "Error deleting song",
@@ -66,7 +68,7 @@ export const getAllSongs = async (req: Request, res: Response) => {
           message: "No songs found",
         });
       }
-      res.status(200).json({
+      return res.status(200).json({
         message: "Songs fetched successfully",
         songs,
       });
@@ -112,37 +114,39 @@ export const updateSong = async (req: Request, res: Response) => {
     });
   }
 
-  try {
-    console.log("song::", id);
-    const song = await Song.findByIdAndUpdate(
-      id,
-      {
-        title: title,
-        artist: artist,
-        album: album,
-        year: year,
-        genre: genre,
-        duration: duration,
-        image: image,
-      },
-      { new: true }
-    );
+  // try {
+  console.log("song::", id);
+  const song = await Song.findByIdAndUpdate(
+    id,
+    {
+      title: title.toLowerCase().trim(),
+      artist: artist,
+      album: album,
+      year: year,
+      genre: genre,
+      duration: duration,
+      image: image,
+    },
+    { new: true }
+  );
 
-    if (!song) {
-      return res.status(404).json({
-        message: "Song not found",
-      });
-    }
-
-    res.status(200).json({
-      message: "Song updated successfully",
-      song,
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Somthing went wronggggg",
+  console.log("song 2222::", id);
+  if (!song) {
+    return res.status(404).json({
+      message: "Song not found",
     });
   }
+
+  console.log("song 3333::", id);
+  return res.status(200).json({
+    message: "Song updated successfully",
+    song,
+  });
+  // } catch (error) {
+  //   res.status(500).json({
+  //     message: "Somthing went wronggggg",
+  //   });
+  // }
 };
 
 export const searchSongs = async (req: Request, res: Response) => {
@@ -160,7 +164,7 @@ export const searchSongs = async (req: Request, res: Response) => {
         message: "Song not found",
       });
     }
-    res.status(200).json({
+    return res.status(200).json({
       message: "Song fetched successfully",
       songs,
     });
