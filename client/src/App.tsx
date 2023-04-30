@@ -4,11 +4,14 @@ import SongList from "./components/SongList";
 import Header from "./components/Header";
 import GlobalStyle from "./style/globalStyle";
 import InsertForm from "./components/forms/InsertForm";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GET_SONGS } from "./redux/types";
 import { SongTypeWithId } from "./types";
 import UpdateForm from "./components/forms/UpdateForm";
 import ShowSong from "./components/ShowSong";
+import { Bars } from "react-loader-spinner";
+import { Box, Text } from "rebass";
+import { RootState } from "./store";
 
 const selectedSongInitial: SongTypeWithId = {
   _id: "",
@@ -28,6 +31,7 @@ function App() {
   const [selectedSong, setSelectedSong] =
     useState<SongTypeWithId>(selectedSongInitial); // [1
   const dispatch = useDispatch();
+  const { songs, isLoading } = useSelector((state: RootState) => state.songs);
 
   useEffect(() => {
     dispatch({
@@ -66,6 +70,21 @@ function App() {
           setShowUpdateForm={setShowUpdateForm}
         />
       )}
+
+      {isLoading && (
+        <LoadingBox>
+          <Bars
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="bars-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+          <Text>Loading...</Text>
+        </LoadingBox>
+      )}
     </AppStyle>
   );
 }
@@ -74,6 +93,7 @@ const AppStyle = styled.div`
   position: relative;
   background-color: inherit;
   overflow-x: hidden;
+  height: 100vh;
 `;
 
 const MainContentsStyle = styled.div`
@@ -86,6 +106,21 @@ const MainContentsStyle = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const LoadingBox = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 20;
+  scroll-events: none;
 `;
 
 export default App;

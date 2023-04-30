@@ -115,7 +115,6 @@ export const updateSong = async (req: Request, res: Response) => {
   }
 
   try {
-    console.log("song::", id);
     const song = await Song.findByIdAndUpdate(
       id,
       {
@@ -130,20 +129,17 @@ export const updateSong = async (req: Request, res: Response) => {
       { new: true }
     );
 
-    console.log("song 2222::", id);
     if (!song) {
       return res.status(404).json({
         message: "Song not found",
       });
     }
 
-    console.log("song 3333::", id);
     return res.status(200).json({
       message: "Song updated successfully",
       song,
     });
   } catch (error) {
-    console.log("ErrOR ::::::: ", error)
     res.status(500).json({
       message: "Somthing went wrong",
     });

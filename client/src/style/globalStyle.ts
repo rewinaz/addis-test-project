@@ -26,5 +26,6 @@ export default createGlobalStyle`
     }
      body {
         background-color: #282c34;
+        overflow: hidden;
     }
 	`;

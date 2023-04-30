@@ -13,7 +13,6 @@ const Header = ({ setShowSidebar }: Props) => {
   const dispatch = useDispatch();
   const searchSongEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    console.log(e.target.value.trim().toLowerCase());
     if (e.target.value.trim().length === 0) {
       return dispatch({
         type: GET_SONGS,

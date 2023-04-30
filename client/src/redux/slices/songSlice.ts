@@ -26,10 +26,8 @@ export const songSlice = createSlice({
     },
 
     setSong: (state, action) => {
-      console.log("FROM SLICE :: ", action);
       state.songs.push(action.payload.song);
       state.songs = state.songs;
-      console.log("FROM SLICE CREATE:: ", action.payload.song);
       return state;
     },
     updateSong: (state, action) => {
@@ -38,7 +36,6 @@ export const songSlice = createSlice({
       );
       state.songs[index] = action.payload.song;
       state.songs = state.songs;
-      console.log("FROM SLICE UPDATE:: ", action.payload.song, " :: ", index);
       return state;
     },
     deleteSong: (state, action) => {
@@ -47,11 +44,9 @@ export const songSlice = createSlice({
       );
       state.songs.splice(index, 1);
       state.songs = state.songs;
-      console.log("FROM SLICE DELETE:: ", action.payload.song, " :: ", index);
       return state;
     },
     setLoading: (state, action) => {
-      console.log("FROM SLICE SET_LOADING:: ", action.payload);
       state.isLoading = action.payload;
       return state;
     },

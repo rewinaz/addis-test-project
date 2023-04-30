@@ -46,7 +46,7 @@ const Sidebar = ({
 };
 
 const SidebarWrapper = styled.div<{ show: boolean }>`
-  position: absolute;
+  position: fixed;
   min-height: 100vh;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.5);

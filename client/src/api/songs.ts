@@ -15,7 +15,6 @@ export const createSongApi = async (song: SongType) => {
 };
 
 export const fetchSongsApi = async () => {
-  console.log("API_URL :: ", API_URL);
   try {
     const { data } = await axios.get(API_URL);
     return data;
@@ -27,7 +26,6 @@ export const fetchSongsApi = async () => {
 export const updateSongApi = async (id: string, song: SongType) => {
   try {
     const { data } = await axios.put(API_URL + `/${id}`, song);
-    console.log("UPDATED_DATA :: ", data);
     return data;
   } catch (err) {
     console.log(err);
@@ -45,7 +43,6 @@ export const deleteSongApi = async (id: string) => {
 
 export const searchSongApi = async (query: string) => {
   try {
-    console.log("QUERY :: ", query);
     const { data } = await axios.get(`${API_URL}/search/${query}`);
     return data;
   } catch (err) {
