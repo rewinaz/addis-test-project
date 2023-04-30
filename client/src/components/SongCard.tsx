@@ -53,6 +53,12 @@ const SongCard = ({
           p: 3,
           borderRadius: "10px",
           boxShadow: "0 0 16px rgba(0, 0, 0, .25)",
+          transition: "all .2s ease-in-out",
+          cursor: "pointer",
+          ":hover": {
+            boxShadow: "0 0 16px rgba(0, 0, 0, .5)",
+            opacity: 0.6,
+          },
         }}
       >
         <Image
@@ -77,8 +83,13 @@ const SongCard = ({
             {song.artist}
           </Text>
         </Box>
-        
-        <Flex justifyContent="space-between" alignItems={"center"} px={2} pt={2}>
+
+        <Flex
+          justifyContent="space-between"
+          alignItems={"center"}
+          px={2}
+          pt={2}
+        >
           <Flex
             alignItems={"center"}
             onClick={updateBtnOnClick}
