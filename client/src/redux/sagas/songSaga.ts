@@ -55,9 +55,9 @@ export function* updateSongSaga(action: {
   payload: { id: string; song: SongType };
 }) {
   console.log("UPDATE_SONG_SAGA :: ", action.payload);
-  const song: ReturnType<typeof updateSongApi> = yield call(() =>
-    updateSongApi(action.payload.id, action.payload.song)
-  );
+  const song: ReturnType<typeof updateSongApi> = yield;
+  updateSongApi(action.payload.id, action.payload.song);
+
   console.log("UPDATE_SONG_SAGA :: ", song);
   if (song) yield put(updateSong(song));
 }
