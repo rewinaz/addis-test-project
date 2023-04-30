@@ -143,8 +143,9 @@ export const updateSong = async (req: Request, res: Response) => {
       song,
     });
   } catch (error) {
+    console.log("ErrOR ::::::: ", error)
     res.status(500).json({
-      message: "Somthing went wronggggg",
+      message: "Somthing went wrong",
     });
   }
 };
