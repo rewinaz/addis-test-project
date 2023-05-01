@@ -82,7 +82,7 @@ const ContentStyle = styled.div`
   width: 90%;
 
   margin-top: 4rem;
-  padding-bottom: 2rem;
+  margin-bottom: 4rem;
 `;
 
 export default Sidebar;
