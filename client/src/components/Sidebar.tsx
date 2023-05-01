@@ -47,7 +47,7 @@ const Sidebar = ({
 
 const SidebarWrapper = styled.div<{ show: boolean }>`
   position: fixed;
-  min-height: 100vh;
+  height: 100vh;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 2;
@@ -59,8 +59,7 @@ const SidebarWrapper = styled.div<{ show: boolean }>`
 
   display: flex;
   justify-content: flex-end;
-  overflow-y: scroll;
-`;
+  `;
 
 const SidebarStyle = styled.div<{ show: boolean }>`
   position: relative;
@@ -69,6 +68,7 @@ const SidebarStyle = styled.div<{ show: boolean }>`
   height: 100%;
   background-color: #1a1a1a;
   z-index: 3;
+  overflow-y: scroll;
 
   display: flex;
   flex-direction: column;
@@ -82,6 +82,7 @@ const ContentStyle = styled.div`
   width: 90%;
 
   margin-top: 4rem;
+  padding-bottom: 2rem;
 `;
 
 export default Sidebar;

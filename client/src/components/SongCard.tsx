@@ -56,7 +56,7 @@ const SongCard = ({
           transition: "all .2s ease-in-out",
           cursor: "pointer",
           ":hover": {
-            boxShadow: "0 0 16px rgba(0, 0, 0, .5)",
+            boxShadow: "0 0 16px #0000007F",
             opacity: 0.6,
           },
         }}
