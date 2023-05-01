@@ -59,6 +59,7 @@ const SidebarWrapper = styled.div<{ show: boolean }>`
 
   display: flex;
   justify-content: flex-end;
+  overflow-y: scroll;
 `;
 
 const SidebarStyle = styled.div<{ show: boolean }>`
