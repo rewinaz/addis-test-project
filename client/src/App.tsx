@@ -82,7 +82,7 @@ function App() {
             wrapperClass=""
             visible={true}
           />
-          <Text>Loading...</Text>
+          <Text>Loading... Backend server can be slow sometimes</Text>
         </LoadingBox>
       )}
     </AppStyle>
