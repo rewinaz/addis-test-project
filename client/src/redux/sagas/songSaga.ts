@@ -9,7 +9,6 @@ import {
 import { SongType, SongTypeWithId } from "../../types/index";
 import {
   deleteSong,
-  getSong,
   getSongs,
   setLoading,
   setSong,
@@ -29,8 +28,8 @@ export function* fetchSongsSaga() {
   const songs: ReturnType<typeof fetchSongsApi> = yield fetchSongsApi();
   if (songs) {
     yield put(getSongs(songs));
-    yield put(setLoading(false));
   }
+  yield put(setLoading(false));
 }
 
 export function* createSongSaga(action: { payload: SongType }) {
@@ -40,8 +39,8 @@ export function* createSongSaga(action: { payload: SongType }) {
   );
   if (song) {
     yield put(setSong(song));
-    yield put(setLoading(false));
   }
+  yield put(setLoading(false));
 }
 
 export function* deleteSongSaga(action: { payload: string }) {
@@ -51,8 +50,8 @@ export function* deleteSongSaga(action: { payload: string }) {
   );
   if (song) {
     yield put(deleteSong(action.payload));
-    yield put(setLoading(false));
   }
+  yield put(setLoading(false));
 }
 
 export function* updateSongSaga(action: {
@@ -66,10 +65,9 @@ export function* updateSongSaga(action: {
   );
 
   if (song) {
-    yield put(setLoading(false));
-
     yield put(updateSong(song));
   }
+  yield put(setLoading(false));
 }
 
 export function* searchSongsSaga(action: { payload: string }) {
@@ -80,8 +78,8 @@ export function* searchSongsSaga(action: { payload: string }) {
   );
   if (songs) {
     yield put(getSongs(songs));
-    yield put(setLoading(false));
   }
+  yield put(setLoading(false));
 }
 
 export function* watchSongsAsync() {
